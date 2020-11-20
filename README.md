@@ -7,7 +7,7 @@
 
 这里需要显示拍照图片，可以一张图片，可以多张图片（不要用SVG图）
 
-![](https://github.com/fary99/DFRobot_Sensor/blob/master/resources/images/SEN0245svg1.png)正反面svg效果图
+![](C:\Users\Fary\Desktop\DFRobot\resources\images\SEN0245svg1.png)正反面svg效果图
 
 
 ## 产品链接（链接到英文商城）
