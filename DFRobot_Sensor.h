@@ -30,7 +30,7 @@
                   Serial.print("(): ");\
                   Serial.print(__LINE__);\
                   Serial.print(" ] ");\
-                  Serial.println(__VA_ARGS);\
+                  Serial.println(__VA_ARGS__);\
                   }
 #else
 #define DBG(...)
@@ -248,7 +248,7 @@ private:
 
 class DFRobot_Sensor_SPI:public DFRobot_Sensor{
 public:
-  DFRobot_Sensor_SPI(SPIClass *spi = &SPI, uint8_t csPin = 4, uint8_t mode=eNomalPrecision+eNormalSpeed+eNormalPower);
+  DFRobot_Sensor_SPI(SPIClass *spi = &SPI, uint8_t csPin = 4, uint8_t mode=eNomalPercision+eNormalSpeed+eNormalPower);
   /**
    * @brief 初始化函数
    * @return 返回0表示初始化成功，返回其他值表示初始化失败

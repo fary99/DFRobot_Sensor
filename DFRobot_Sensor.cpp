@@ -34,7 +34,7 @@ int DFRobot_Sensor::begin(void){
 }
 
 uint16_t DFRobot_Sensor::soundStrengthDB(void){
-  sCombineData_t data;
+  sCombinedData_t data;
   readReg(SENSOR_ADDR_DATA, &data, sizeof(data));
   DBG("sound reg raw data is");
   DBG(data.sound);
@@ -42,7 +42,7 @@ uint16_t DFRobot_Sensor::soundStrengthDB(void){
 }
 
 uint32_t DFRobot_Sensor::lightStrengthLux(void){
-  sCombineData_t data;
+  sCombinedData_t data;
   readReg(SENSOR_ADDR_DATA, &data, sizeof(data));
   DBG("light reg raw data is");
   DBG(data.sound);
@@ -61,13 +61,13 @@ void DFRobot_Sensor::setLED(uint16_t color){
 uint8_t DFRobot_Sensor::switchMode(uint8_t mode){
   uint8_t tmp;
   #ifdef ENABLE_DBG
-    readReg(SENSOR_ADDR_CONFIG, &tmp; sizeof(tmp));
+    readReg(SENSOR_ADDR_CONFIG, &tmp, sizeof(tmp));
     DBG("before switch Mod, ModeReg = ");
     DBG(tmp);
   #endif
   writeReg(SENSOR_ADDR_CONFIG, &mode, sizeof(mode));
   #ifdef ENABLE_DBG
-    readReg(SENSOR_ADDR_CONFIG, &tmp; sizeof(tmp));
+    readReg(SENSOR_ADDR_CONFIG, &tmp, sizeof(tmp));
     DBG("after switch Mod, ModeReg = ");
     DBG(tmp);
   #endif
@@ -84,12 +84,12 @@ int DFRobot_Sensor_IIC::begin(void){
   return DFRobot_Sensor::begin();
 }
 
-void DFRobot_Sensor_IIC::wirteReg(uint8_t reg, void* pBuf, size_t size){
+void DFRobot_Sensor_IIC::writeReg(uint8_t reg, void* pBuf, size_t size){
   if(pBuf == NULL){
     DBG("pBuf ERROR!! : null pointer");
   }
   
-  uint8_t * _PBuf = (uint8_t*)pBuf;
+  uint8_t * _pBuf = (uint8_t*)pBuf;
   _pWire->beginTransmission(_deviceAddr);
   for(uint16_t i=0; i<size; i++){
     _pWire->write(_pBuf[i]);
@@ -123,18 +123,18 @@ DFRobot_Sensor_SPI::DFRobot_Sensor_SPI(SPIClass *pSpi, uint8_t csPin, uint8_t mo
 }
 
 int DFRobot_Sensor_SPI::begin(void){
-  pinMode(csPin, OUTPUT);
+  pinMode(_csPin, OUTPUT);
   _pSpi->begin();
   return DFRobot_Sensor::begin();
 }
 
-void DFRobot_Sensor_SPI::wirteReg(uint8_t reg, void* pBuf, size_t size){
+void DFRobot_Sensor_SPI::writeReg(uint8_t reg, void* pBuf, size_t size){
   if(pBuf == NULL){
     DBG("pBuf ERROR!! : null pointer");
   }
   
-  uint8_t * _PBuf = (uint8_t*)pBuf;
-  _pSpi->beginTransaction(SPISetting(1000000, MSBFIRST, SPI_MODE0));
+  uint8_t * _pBuf = (uint8_t*)pBuf;
+  _pSpi->beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(_csPin, LOW);
   _pSpi->transfer(reg);
   while(size--){
@@ -150,13 +150,13 @@ uint8_t DFRobot_Sensor_SPI::readReg(uint8_t reg, void* pBuf, size_t size){
     DBG("pBuf ERROR!! : null pointer");
   }
   
-  uint8_t * _PBuf = (uint8_t*)pBuf;
+  uint8_t * _pBuf = (uint8_t*)pBuf;
   size_t count = 0;
-  _pSpi->beginTransaction(SPISetting(1000000, MSBFIRST, SPI_MODE0));
+  _pSpi->beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE0));
   digitalWrite(_csPin,LOW);
   _pSpi->transfer(reg);
   while(size--){
-    *_PBuf = _pSpi->transfer(0x00);
+    *_pBuf = _pSpi->transfer(0x00);
     _pBuf++;
     count++;
   }
